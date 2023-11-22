@@ -11,7 +11,7 @@ Building and running:
 >make
 >./YAGCS
 
-![alt text](https://github.com/garthwhelan/YAGCS/blob/master/example_pic.png?raw=true)
+![alt text](https://github.com/garthwhelan/YAGCS/blob/main/example_pic.png?raw=true)
 
 TODO:
 
