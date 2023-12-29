@@ -149,6 +149,8 @@ void MainWindow::readLineData() {
         this->state.status = RUN;
       } else if (state == "Alarm") {
         this->state.status = ALARM;
+      } else if (state == "Home") {
+        this->state.status = HOME;
       } else {
         assert(false);
       }
@@ -173,6 +175,8 @@ void MainWindow::readLineData() {
                              l[2].toDouble()};
         } else if (s.left(2) == "A:") { // Alarm
           continue;
+        } else if (s.left(3) == "Pn:") {
+          continue;
         } else {
           assert(false);
         }
@@ -194,6 +198,9 @@ void MainWindow::readLineData() {
     }
 
     if (read_string.left(1) == "[" and read_string.right(1) == "]") {
+      if (read_string.left(5) == "[PRB:") {
+        this->findChild<QLabel *>("last_probe")->setText("Last Probe:" + read_string);
+      }
       //TODO: parse and make more human readable
       this->findChild<QStatusBar *>("statusbar")
         ->showMessage(this->state.status_str[this->state.status] + " | " + read_string);

@@ -7,11 +7,11 @@
 #include <Qt3DCore/QEntity>
 #include <Qt3DRender/QCamera>
 
-enum m_status { UNINITIALIZED, IDLE, JOG, CHECK, HOLD0, HOLD1, RUN, ALARM };
+enum m_status { UNINITIALIZED, IDLE, JOG, CHECK, HOLD0, HOLD1, RUN, ALARM, HOME };
 
 struct MachineState {
   m_status status = UNINITIALIZED;
-  const QString status_str[8]{"UNINITIALIZED", "IDLE", "JOG", "CHECK", "HOLD0", "HOLD1", "RUN", "ALARM"};
+  const QString status_str[9]{"UNINITIALIZED", "IDLE", "JOG", "CHECK", "HOLD0", "HOLD1", "RUN", "ALARM", "HOME"};
   std::array<double, 3> xyz_mcs;
   std::array<double, 2> fs;
   std::array<double, 3> ov;

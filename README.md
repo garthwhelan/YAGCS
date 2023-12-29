@@ -8,7 +8,9 @@ Features:
 Building and running:
 
 >qmake
+
 >make
+
 >./YAGCS
 
 ![alt text](https://github.com/garthwhelan/YAGCS/blob/main/example_pic.png?raw=true)
