@@ -85,13 +85,16 @@ void MainWindow::send_gcode() {
   while (this->sending_gcode and this->gcode_queue.length() > 0 and this->response_count == 0) {
     QString line = this->gcode_queue.first();
     this->gcode_queue.pop_front();
-    if (line.left(1) == "(") { // Don't send comments
+    if (line.left(1) == "(" or
+        false) {//line.length() == 0) {// no comments
       continue;
     }
-    if (line.contains("M6")) { // Pause for user to change tool
+    if (line.contains("M")) { // Pause for user to change tool
       this->response_count -= 1;          
       this->writeData((line+"\n").toLocal8Bit());
-      this->sending_gcode = false;
+      if (line.contains("M6")) {
+	this->sending_gcode = false;
+      }
       continue;
     }
     this->response_count -= 1;    
@@ -114,7 +117,7 @@ void MainWindow::readLineData() {
       read_string = read_string.left(read_string.length() - 1);
     }
 
-    qDebug() << "FROMGRBL:" << read_string;
+    //qDebug() << "FROMGRBL:" << read_string;
         
     if (read_string == "ok") {
       this->response_count += 1;
@@ -341,36 +344,42 @@ void MainWindow::on_xp_jog_clicked() {
   QPair<QString, QString> ds = ds_helper();
   QString str = QString("$J=G91 G21 X%1 F%2\n").arg(ds.first, ds.second);
   QByteArray q = str.toLocal8Bit();
+  this->response_count -= 1;
   this->writeData(q);
 }
 void MainWindow::on_xm_jog_clicked() {
   QPair<QString, QString> ds = ds_helper();
   QString str = QString("$J=G91 G21 X-%1 F%2\n").arg(ds.first, ds.second);
   QByteArray q = str.toLocal8Bit();
+  this->response_count -= 1;
   this->writeData(q);
 }
 void MainWindow::on_yp_jog_clicked() {
   QPair<QString, QString> ds = ds_helper();
   QString str = QString("$J=G91 G21 Y%1 F%2\n").arg(ds.first, ds.second);
   QByteArray q = str.toLocal8Bit();
+  this->response_count -= 1;
   this->writeData(q);
 }
 void MainWindow::on_ym_jog_clicked() {
   QPair<QString, QString> ds = ds_helper();
   QString str = QString("$J=G91 G21 Y-%1 F%2\n").arg(ds.first, ds.second);
   QByteArray q = str.toLocal8Bit();
+  this->response_count -= 1;
   this->writeData(q);
 }
 void MainWindow::on_zp_jog_clicked() {
   QPair<QString, QString> ds = ds_helper();
   QString str = QString("$J=G91 G21 Z%1 F%2\n").arg(ds.first, ds.second);
   QByteArray q = str.toLocal8Bit();
+  this->response_count -= 1;
   this->writeData(q);
 }
 void MainWindow::on_zm_jog_clicked() {
   QPair<QString, QString> ds = ds_helper();
   QString str = QString("$J=G91 G21 Z-%1 F%2\n").arg(ds.first, ds.second);
   QByteArray q = str.toLocal8Bit();
+  this->response_count -= 1;
   this->writeData(q);
 }
 
@@ -497,6 +506,7 @@ void MainWindow::on_mode_button_clicked() {
     QString y = this->findChild<QLineEdit *>("y_wcs")->text();
     QString z = this->findChild<QLineEdit *>("z_wcs")->text();
     QString str = QString("G10 L20 X%1 Y%2 Z%3\n").arg(x, y, z);
+    this->response_count -= 1;
     this->writeData(str.toLocal8Bit());
   } else if (text.compare("DISABLED") == 0) {
     return;
